@@ -1,97 +1,31 @@
 <html>
  <meta charset="UTF-8"> 
-	<head>
-		<title>Tracy Demo</title>
-		<style>
-			body { margin: 0; }
-			canvas { width: 100%; height: 100% }
-		</style>
-	</head>
-	<body>
-		<script src="js/three.min.js"></script>
-		<script src="js/cannon.min.js"></script>
-		<script src="build/cannon.js"></script>
-	    <script src="build/cannon.demo.js"></script>
-	    <script src="libs/dat.gui.js"></script>
-	    <script src="libs/Three.js"></script>
-	    <script src="libs/TrackballControls.js"></script>
-	    <script src="libs/Detector.js"></script>
-	    <script src="libs/Stats.js"></script>
-	    <script src="libs/smoothie.js"></script>
-		<script>
-		var demo = new CANNON.Demo();
+    <head>
+        <title>Tracy Demo</title>
+        <style>
+            body { margin: 0; }
+            canvas { width: 100%; height: 100% }
+        </style>
+    </head>
+    <body>
+        <script src="js/three.min.js"></script>
+        <script src="js/cannon.min.js"></script>
+        <script src="build/cannon.js"></script>
+        <script src="build/cannon.demo.js"></script>
+        <script src="libs/dat.gui.js"></script>
+        <script src="libs/Three.js"></script>
+        <script src="libs/TrackballControls.js"></script>
+        <script src="libs/Detector.js"></script>
+        <script src="libs/Stats.js"></script>
+        <script src="libs/Tracy.js"></script>
+        <script src="libs/smoothie.js"></script>
+        <script>
+        var demo = new CANNON.Demo();
         var world = demo.getWorld();
         var vehicles = [];
 
-        function Tracy(x,y,z)
-        {
-            var chassisShape = new CANNON.Box(new CANNON.Vec3(2.5, 2.5,0.5));
-            var chassisBody = new CANNON.Body({ mass: 150 });
-            chassisBody.addShape(chassisShape);
-            chassisBody.position.set(x,y,z);
-            chassisBody.angularVelocity.set(0, 0, 0.7);
-            demo.addVisual(chassisBody);
-
-            // Settings for the vehicle.
-            var options = {
-                radius: 1.4,
-                directionLocal: new CANNON.Vec3(0, 0, -1),
-                suspensionStiffness: 30,
-                suspensionRestLength: 0.3,
-                frictionSlip: 1,
-                dampingRelaxation: 2.3,
-                dampingCompression: 4.4,
-                maxSuspensionForce: 100000,
-                rollInfluence:  0.01,
-                axleLocal: new CANNON.Vec3(0, 1, 0),
-                chassisConnectionPointLocal: new CANNON.Vec3(1, 1, 0),
-                maxSuspensionTravel: 0.3,
-                customSlidingRotationalSpeed: -30,
-                useCustomSlidingRotationalSpeed: true
-            };
-
-            // Create the vehicle
-            var vehicle = new CANNON.RaycastVehicle({
-                chassisBody: chassisBody,
-            });
-
-            options.chassisConnectionPointLocal.set(1.5, 2.5, 0);
-            vehicle.addWheel(options);
-
-            options.chassisConnectionPointLocal.set(1.5, -2.5, 0);
-            vehicle.addWheel(options);
-
-            options.chassisConnectionPointLocal.set(-1.5, 2.5, 0);
-            vehicle.addWheel(options);
-
-            options.chassisConnectionPointLocal.set(-1.5, -2.5, 0);
-            vehicle.addWheel(options);
-
-            vehicle.addToWorld(world);
-
-            // Create wheel shapes.
-            vehicle.wheelBodies = [];
-            for(var i=0; i<vehicle.wheelInfos.length; i++){
-                var wheel = vehicle.wheelInfos[i];
-                var cylinderShape = new CANNON.Cylinder(wheel.radius, wheel.radius, wheel.radius / 2, 20);
-                var wheelBody = new CANNON.Body({
-                    mass: 0
-                });
-                wheelBody.type = CANNON.Body.KINEMATIC;
-                wheelBody.collisionFilterGroup = 0; // turn off collisions
-                var q = new CANNON.Quaternion();
-                q.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), Math.PI / 2);
-                wheelBody.addShape(cylinderShape, new CANNON.Vec3(), q);
-                vehicle.wheelBodies.push(wheelBody);
-                demo.addVisual(wheelBody);
-                world.addBody(wheelBody);
-            }
-
-            vehicles.push(vehicle);
-        }
-
         demo.addScene("car",function(){
-        	// Initialise world settings.
+            // Initialise world settings.
             world.broadphase = new CANNON.SAPBroadphase(world);
             world.gravity.set(0, 0, -10);
             world.defaultContactMaterial.friction = 0.1;
@@ -122,10 +56,7 @@
             world.addContactMaterial(wheelGroundContactMaterial);
 
             // Create four tracies and set their x,y,z positions.
-            Tracy(60,0,4);
-            Tracy(30,5,4);
-            Tracy(-20,0,4);
-            Tracy(-60,0,4);
+            Simulator(-60,1,2);
 
 
             // Update wheels
@@ -147,8 +78,17 @@
             var polyhedronShape = createTetra();
             var polyhedronBody = new CANNON.Body({ mass: 1000, material: groundMaterial });
             polyhedronBody.addShape(polyhedronShape);
-            polyhedronBody.position.set(10,-5,1);
-            polyhedronBody.quaternion.setFromAxisAngle(new CANNON.Vec3(0,0,1),THREE.Math.degToRad(-20));
+            polyhedronBody.position.set(20,-5,1);
+            polyhedronBody.quaternion.setFromAxisAngle(new CANNON.Vec3(0,0,1),THREE.Math.degToRad(135));
+            world.addBody(polyhedronBody);
+            demo.addVisual(polyhedronBody);
+
+
+            var polyhedronShape = new CANNON.Box(new CANNON.Vec3(5,5,5));
+            var polyhedronBody = new CANNON.Body({ mass: 1000, material: groundMaterial });
+            polyhedronBody.addShape(polyhedronShape);
+            polyhedronBody.position.set(-60,-10,10);
+            polyhedronBody.quaternion.setFromAxisAngle(new CANNON.Vec3(0,0,1),THREE.Math.degToRad(135));
             world.addBody(polyhedronBody);
             demo.addVisual(polyhedronBody);
 
@@ -193,9 +133,9 @@
         function createTetra()
         {
             var verts = [new CANNON.Vec3(0,0,0),
-                         new CANNON.Vec3(20,0,0),
-                         new CANNON.Vec3(0,20,0),
-                         new CANNON.Vec3(0,0,5)];
+                         new CANNON.Vec3(40,0,0),
+                         new CANNON.Vec3(0,40,0),
+                         new CANNON.Vec3(0,0,10)];
             var offset = -0.35;
 
             for(var i=0; i<verts.length; i++)
@@ -208,31 +148,6 @@
             return new CANNON.ConvexPolyhedron(verts,[[0,3,2],[0,1,3],[0,2,1],[1,2,3]]);
         }
 
-        // Rotates the vehicle to the left infinitely.
-        vehicles[0].applyEngineForce(rotationForce, 1);
-        vehicles[0].applyEngineForce(rotationForce, 3);
-        vehicles[0].applyEngineForce(-rotationForce, 0);
-        vehicles[0].applyEngineForce(-rotationForce, 2);
-
-        // Rotates the vehicle to the right infinitely.
-        vehicles[2].applyEngineForce(-rotationForce, 1);
-        vehicles[2].applyEngineForce(-rotationForce, 3);
-        vehicles[2].applyEngineForce(rotationForce, 0);
-        vehicles[2].applyEngineForce(rotationForce, 2);
-
-        vehicles[1].applyEngineForce(230, 0);
-        vehicles[1].applyEngineForce(230, 1);
-
-        function stop()
-        {
-            vehicles[1].setBrake(300,0);
-            vehicles[1].setBrake(300,1);
-            vehicles[1].setBrake(300,2);
-            vehicles[1].setBrake(300,3);
-        }
-
-        setTimeout(stop, 4000);
-
         // Keyboard Controls
         document.onkeydown = handler;
         document.onkeyup = handler;
@@ -240,53 +155,133 @@
         // Extra boost multiplier to make the car move slower or faster.
         var boost = 0.5;
 
-        function handler(event){
-            var up = (event.type == 'keyup');
-
-            if(!up && event.type !== 'keydown'){
-                return;
-            }
-
-            // Set breaks to reset car to initial position.
-            vehicles[3].setBrake(0, 0);
-            vehicles[3].setBrake(0, 1);
-            vehicles[3].setBrake(0, 2);
-            vehicles[3].setBrake(0, 3);
-
-            switch(event.keyCode){
-            case 38: // forward
-                vehicles[3].applyEngineForce(up ? 0 : -maxForce*boost, 2);
-                vehicles[3].applyEngineForce(up ? 0 : -maxForce*boost, 3);
-                break;
-
-            case 40: // backward
-                vehicles[3].applyEngineForce(up ? 0 : maxForce*boost, 2);
-                vehicles[3].applyEngineForce(up ? 0 : maxForce*boost, 3);
-                break;
-
-            case 66: // b
-                vehicles[3].setBrake(brakeForce, 0);
-                vehicles[3].setBrake(brakeForce, 1);
-                vehicles[3].setBrake(brakeForce, 2);
-                vehicles[3].setBrake(brakeForce, 3);
-                break;
-
-            case 39: // right
-                vehicles[3].applyEngineForce(up ? 0 : rotationForce, 1);
-                vehicles[3].applyEngineForce(up ? 0 : rotationForce, 3);
-                vehicles[3].applyEngineForce(up ? 0 : -rotationForce, 0);
-                vehicles[3].applyEngineForce(up ? 0 : -rotationForce, 2);
-                break;
-
-            case 37: // left
-                vehicles[3].applyEngineForce(up ? 0 : -rotationForce, 1);
-                vehicles[3].applyEngineForce(up ? 0 : -rotationForce, 3);
-                vehicles[3].applyEngineForce(up ? 0 : rotationForce, 0);
-                vehicles[3].applyEngineForce(up ? 0 : rotationForce, 2);
-                break;
-
-            }
+        var test = {
+            VelocityX: 0,
+            VelocityY: 0,
+            VelocityZ: 0,
+            OriX:0,
+            OriY:0,
+            OriZ:0
         }
-		</script>
-	</body>
+
+        wtf = new dat.GUI();
+        wtf.addFolder("Accelerometer");
+        wtf.add(test,"VelocityX",-20,20).listen();
+        wtf.add(test,"VelocityY",-20,20).listen();
+        wtf.add(test,"VelocityZ",-20,20).listen();
+
+        wtf.addFolder("Orientation");
+        wtf.add(test,"OriX",-1,1).listen();
+        wtf.add(test,"OriY",-1,1).listen();
+        wtf.add(test,"OriZ",-1,1).listen();
+        wtf.close("Orientation");
+
+        function showSpeed()
+        {
+            test.VelocityX = vehicles[0].chassisBody.velocity.x;
+            test.VelocityY = vehicles[0].chassisBody.velocity.y;
+            test.VelocityZ = vehicles[0].chassisBody.velocity.z;
+
+            test.OriX = vehicles[0].chassisBody.quaternion.x;
+            test.OriY = vehicles[0].chassisBody.quaternion.y;
+            test.OriZ = vehicles[0].chassisBody.quaternion.z;
+        }
+
+
+        function useSensors()
+        {
+            var sensorDistance = 8;
+            var sensorWidth = 20; // The width of the sensor in degrees.
+            var sensorPrecision = 10;
+            var results = [];
+
+            for(i=-sensorPrecision; i<=sensorPrecision;i++)
+            {
+                TracyX = vehicles[0].chassisBody.position.x;
+                TracyY = vehicles[0].chassisBody.position.y;
+                TracyZ = vehicles[0].chassisBody.position.z;
+                source = new CANNON.Vec3(TracyX, TracyY, TracyZ);
+
+                // Front Sensor
+                localTarget = new CANNON.Vec3(sensorDistance, (i/sensorPrecision) * Math.tan(sensorWidth/2.0) * sensorDistance, 0); 
+                worldTarget = new CANNON.Vec3(0,0,0);
+                vehicles[0].chassisBody.pointToWorldFrame(localTarget,worldTarget);
+                leftSensorResult = new CANNON.RaycastResult();
+                world.rayTest(source,worldTarget,leftSensorResult);
+                var shape = new CANNON.Box(new CANNON.Vec3(1,1,1));
+                var body = new CANNON.Body({ mass: 1 });
+                body.addShape(shape);
+                body.quaternion.copy(vehicles[0].chassisBody.quaternion);
+                body.position.set( worldTarget.x,worldTarget.y,worldTarget.z );
+                demo.addVisual(body);
+
+                if(leftSensorResult.hasHit)
+                {
+                    results.push("F");
+                }
+
+                // Right Sensor
+                localTarget = new CANNON.Vec3((i/sensorPrecision) * Math.tan(sensorWidth/2.0) * sensorDistance, -sensorDistance, 0);
+                worldTarget = new CANNON.Vec3(0,0,0);
+                vehicles[0].chassisBody.pointToWorldFrame(localTarget,worldTarget);
+                rightSensorResult = new CANNON.RaycastResult();
+                world.rayTest(source,worldTarget,rightSensorResult);
+
+                if(rightSensorResult.hasHit)
+                {
+                    results.push("R");
+                }
+
+                // Left Sensor
+                localTarget = new CANNON.Vec3((i/sensorPrecision) * Math.tan(sensorWidth/2.0) * sensorDistance, sensorDistance, 0);
+                worldTarget = new CANNON.Vec3(0,0,0);
+                vehicles[0].chassisBody.pointToWorldFrame(localTarget,worldTarget);
+                frontSensorResult = new CANNON.RaycastResult();
+                world.rayTest(source,worldTarget,frontSensorResult);
+
+                if(frontSensorResult.hasHit)
+                {
+                    results.push("L");
+                }
+            }
+
+            alert(results);
+        }
+
+        function testHit()
+        {
+            TracyX = vehicles[0].chassisBody.position.x;
+            TracyY = vehicles[0].chassisBody.position.y;
+            TracyZ = vehicles[0].chassisBody.position.z;
+
+            from  = new CANNON.Vec3(TracyX, TracyY, TracyZ);
+            tracyLeft = new CANNON.Vec3(10,0,0);
+            tracyRight = new CANNON.Vec3(-10,0,0);
+            tracyFront = new CANNON.Vec(0,10,0);
+
+            worldLeft = new CANNON.Vec3(0,0,0);
+            worldLeft = new CANNON.Vec3(0,0,0);
+            worldLeft = new CANNON.Vec3(0,0,0);
+
+
+            targetLeft = vehicles[0].chassisBody.pointToWorldFrame(localPosition,worldPosition);
+            targetLeft = vehicles[0].chassisBody.pointToWorldFrame(localPosition,worldPosition);
+            targetLeft = vehicles[0].chassisBody.pointToWorldFrame(localPosition,worldPosition);
+
+            leftResult = new CANNON.RaycastResult();
+            world.rayTest(from,to,result);
+            //alert("FrontSensor:"result.hasHit+"LeftSensor:"result.hasHit+"RightSensor:"result.hasHit+);
+                
+            var shape = new CANNON.Box(new CANNON.Vec3(1,1,1));
+            var body = new CANNON.Body({ mass: 1 });
+            body.addShape(shape);
+            body.quaternion.copy(vehicles[0].chassisBody.quaternion);
+            body.position.set( worldPosition.x,worldPosition.y,worldPosition.z );
+            demo.addVisual(body);
+
+        }
+
+        setInterval(showSpeed, 200);
+        </script>
+    </body>
 </html>

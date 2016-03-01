@@ -480,7 +480,7 @@ CANNON.Demo = function(options){
         //light.shadowCameraVisible = true;
 
         secondLight = new THREE.SpotLight( 0xffffff );
-        secondLight.position.set( 20, 0, 30 );
+        secondLight.position.set( 20, 0, 20 );
         secondLight.target.position.set( 20, 0, 0 );
 
         secondLight.castShadow = true;
@@ -948,6 +948,10 @@ CANNON.Demo.prototype.setGlobalSpookParams = function(k,d,h){
     world.defaultContactMaterial.contactEquationRelaxation = d;
     world.defaultContactMaterial.frictionEquationRelaxation = d;
 };
+
+CANNON.Demo.prototype.getGui = function(){
+    return this.gui;
+}
 
 CANNON.Demo.prototype.getWorld = function(){
     return this.world;
