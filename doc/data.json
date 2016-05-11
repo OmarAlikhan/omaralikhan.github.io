@@ -1,0 +1,360 @@
+{
+    "project": {},
+    "files": {
+        "Simulator.js": {
+            "name": "Simulator.js",
+            "modules": {},
+            "classes": {
+                "Simulator": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "Tracy.js": {
+            "name": "Tracy.js",
+            "modules": {},
+            "classes": {
+                "Tracy": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {},
+    "classes": {
+        "Simulator": {
+            "name": "Simulator",
+            "shortname": "Simulator",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "Simulator.js",
+            "line": 1,
+            "description": "Class used to create the simulator environment that Tracy is run in.",
+            "is_constructor": 1
+        },
+        "Tracy": {
+            "name": "Tracy",
+            "shortname": "Tracy",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "Tracy.js",
+            "line": 1,
+            "description": "Class used to emulate the Pololu Zumo 32u4 robot.",
+            "is_constructor": 1
+        }
+    },
+    "elements": {},
+    "classitems": [
+        {
+            "file": "Simulator.js",
+            "line": 46,
+            "description": "Initialise the GUI which will display sensor readings",
+            "itemtype": "method",
+            "name": "initialiseGui",
+            "class": "Simulator"
+        },
+        {
+            "file": "Simulator.js",
+            "line": 85,
+            "description": "Reset Tracy to her original position.",
+            "itemtype": "method",
+            "name": "resetTracy",
+            "class": "Simulator"
+        },
+        {
+            "file": "Simulator.js",
+            "line": 97,
+            "description": "Set the initial settings for the world",
+            "itemtype": "method",
+            "name": "initialiseWorld",
+            "params": [
+                {
+                    "name": "gravity",
+                    "description": "The value of the gravity to be applied in the +Z direction.",
+                    "type": "Float"
+                },
+                {
+                    "name": "friction",
+                    "description": "The value of the default friction to be applied in the world.",
+                    "type": "Float"
+                }
+            ],
+            "class": "Simulator"
+        },
+        {
+            "file": "Simulator.js",
+            "line": 143,
+            "description": "Creates a floor grid containing rows by columns number of tiles.\nEach tile is of size 1 and is created as a static body.",
+            "itemtype": "method",
+            "name": "createFloorGrid",
+            "params": [
+                {
+                    "name": "rows",
+                    "description": "The number of rows of tiles.",
+                    "type": "Integer"
+                },
+                {
+                    "name": "rolumns",
+                    "description": "The number of columns of tiles.",
+                    "type": "Integer"
+                }
+            ],
+            "class": "Simulator"
+        },
+        {
+            "file": "Simulator.js",
+            "line": 172,
+            "description": "Add a block of weight 1kg and dimensions of width x length x height\nat position x, y, z to the world.",
+            "itemtype": "method",
+            "name": "addBlock",
+            "params": [
+                {
+                    "name": "positionX",
+                    "description": "The x coordinate of where the block will be placed.",
+                    "type": "Float"
+                },
+                {
+                    "name": "positionY",
+                    "description": "The y coordinate of where the block will be placed.",
+                    "type": "Float"
+                },
+                {
+                    "name": "positionZ",
+                    "description": "The z coordinate of where the block will be placed.",
+                    "type": "Float"
+                },
+                {
+                    "name": "width",
+                    "description": "The width of the block to be added.",
+                    "type": "Float"
+                },
+                {
+                    "name": "length",
+                    "description": "The length of the block to be added.",
+                    "type": "Float"
+                },
+                {
+                    "name": "height",
+                    "description": "The height of the block to be added.",
+                    "type": "Float"
+                }
+            ],
+            "class": "Simulator"
+        },
+        {
+            "file": "Simulator.js",
+            "line": 194,
+            "description": "Create a ramp of dimensions 20x5x0.5 that is tilted at an angle of 30 degrees. The purpose\nof the ramp is to allow testing the sensors of Tracy in the Z axis.",
+            "itemtype": "method",
+            "name": "addRamp",
+            "params": [
+                {
+                    "name": "x",
+                    "description": "The x coordinate of where the ramp will be placed.",
+                    "type": "Integer"
+                },
+                {
+                    "name": "y",
+                    "description": "The y coordinate of where the ramp will be placed.",
+                    "type": "Integer"
+                }
+            ],
+            "class": "Simulator"
+        },
+        {
+            "file": "Simulator.js",
+            "line": 214,
+            "description": "Create a simple line to allow testing of Tracy's line sensors. The lines are \nrepresented as slim rectangles of dimensions length x 0.5 x 0.5.",
+            "itemtype": "method",
+            "name": "addLine",
+            "params": [
+                {
+                    "name": "x",
+                    "description": "The starting x coordinate of the line.",
+                    "type": "Float"
+                },
+                {
+                    "name": "y",
+                    "description": "The starting y coordinate of the line.",
+                    "type": "Float"
+                },
+                {
+                    "name": "length",
+                    "description": "The length of the line from the starting point.",
+                    "type": "Float"
+                },
+                {
+                    "name": "orientation",
+                    "description": "The angle of the line represented as degrees.",
+                    "type": "Float"
+                },
+                {
+                    "name": "brightness",
+                    "description": "The brightness of the line that will be read by the line sensors.",
+                    "type": "Float"
+                }
+            ],
+            "class": "Simulator"
+        },
+        {
+            "file": "Simulator.js",
+            "line": 239,
+            "description": "Add a Tracy into the simulator. This will create a physical\nbody for Tracy in Cannon JS and then a visual body in Three JS.",
+            "itemtype": "method",
+            "name": "addTracy",
+            "params": [
+                {
+                    "name": "tracy",
+                    "description": "The Tracy object that will be added to the world.",
+                    "type": "Object"
+                }
+            ],
+            "class": "Simulator"
+        },
+        {
+            "file": "Simulator.js",
+            "line": 265,
+            "description": "Return the Tracy object at the given index if multiple Tracy are present.",
+            "itemtype": "method",
+            "name": "getTracy",
+            "params": [
+                {
+                    "name": "index",
+                    "description": "The index of the Tracy to be retrieved.",
+                    "type": "Integer"
+                }
+            ],
+            "class": "Simulator"
+        },
+        {
+            "file": "Simulator.js",
+            "line": 276,
+            "description": "Returns the position of Tracy in the world as an XYZ vector.",
+            "itemtype": "method",
+            "name": "getTracyPosition",
+            "return": {
+                "description": "Returns a CANNON.Vec3 object which has .x .y .z properties.",
+                "type": "Object"
+            },
+            "class": "Simulator"
+        },
+        {
+            "file": "Simulator.js",
+            "line": 287,
+            "description": "Allow user to control Tracy for debugging purposes.",
+            "itemtype": "method",
+            "name": "handleKeyboardInput",
+            "params": [
+                {
+                    "name": "event",
+                    "description": "The key that is pressed.",
+                    "type": "Object"
+                }
+            ],
+            "class": "Simulator"
+        },
+        {
+            "file": "Tracy.js",
+            "line": 107,
+            "description": "Returns the acceleration of Tracy at the time the function is called.",
+            "itemtype": "method",
+            "name": "getAccelerometerReading",
+            "return": {
+                "description": "Returns a CANNON.Vec3 object which represents the acceleration measured.\n                 The acceleration has an x, y and z components that can be accessed.",
+                "type": "Object"
+            },
+            "class": "Tracy"
+        },
+        {
+            "file": "Tracy.js",
+            "line": 118,
+            "description": "Returns the angular velocity of Tracy at the time the function is called.",
+            "itemtype": "method",
+            "name": "getGyroscopeReading",
+            "return": {
+                "description": "Returns a CANNON.Vec3 object which has .x .y .z properties.",
+                "type": "Object"
+            },
+            "class": "Tracy"
+        },
+        {
+            "file": "Tracy.js",
+            "line": 128,
+            "description": "Returns the orientation of Tracy as a quaternion.",
+            "itemtype": "method",
+            "name": "getMagnetometerReading",
+            "return": {
+                "description": "Returns a CANNON.Vec3 object which represents the orientation measured.\n                 The quaternion has an x, y and z components that can be accessed.",
+                "type": "Object"
+            },
+            "class": "Tracy"
+        },
+        {
+            "file": "Tracy.js",
+            "line": 139,
+            "description": "Apply the a brake force to all the wheels. It is not sufficient enough\nto set the engine force to zero as the wheels will continue to roll\non the surface. Therefore, use this function to fully stop the vehicle.",
+            "itemtype": "method",
+            "name": "stop",
+            "class": "Tracy"
+        },
+        {
+            "file": "Tracy.js",
+            "line": 152,
+            "description": "Set the left and right motor speeds. \nTracy can rotate to either side by setting one motor speed to x and the other to -x.",
+            "itemtype": "method",
+            "name": "setMotorSpeeds",
+            "params": [
+                {
+                    "name": "amount",
+                    "description": "of force to be applied on the right motor measured in N.",
+                    "type": "Integer"
+                },
+                {
+                    "name": "amount",
+                    "description": "of force to be applied on the left motor measured in N.",
+                    "type": "Integer"
+                }
+            ],
+            "class": "Tracy"
+        },
+        {
+            "file": "Tracy.js",
+            "line": 174,
+            "description": "Alternativee implementation of setMotorSpeeds used for accelerating Tracy\nin the positive x-axis; allowing for testing of the accelerometer in the x-axis.\nThis method will be replaced once the RayCastVehicle implementation is switch to \na RigidVehicle implementation.",
+            "itemtype": "method",
+            "name": "setMotorVelocity",
+            "class": "Tracy"
+        },
+        {
+            "file": "Tracy.js",
+            "line": 192,
+            "description": "Emulates the line sensor on the Tracy by raycasting downards and checks\nif it has intersected with any lines.",
+            "itemtype": "method",
+            "name": "getLineSensorReading",
+            "return": {
+                "description": "Returns a sensorReading object which has a .outerLeft .innerLeft\n                 .outerRight .innerRight .middleSensor properties corresponding to\n                 the position of the sensor relative to Pololu Zumo 32u4. The value\n                 of the reading represents the brightness of the body it intersects.",
+                "type": "Object"
+            },
+            "class": "Tracy"
+        },
+        {
+            "file": "Tracy.js",
+            "line": 222,
+            "description": "Emulates the proximity sensor on the Pololu Zumo 32u4 by raycasting in a 2D arc.\nThe arc has radius 4 and angle of 20 degrees. Any objects that the ray intersects\nwithin this area will be considered as an detected object.",
+            "itemtype": "method",
+            "name": "getProximitySensor",
+            "return": {
+                "description": "Returns a sensorReadings object that has .left .right .front properties\n                 that can be accessed. The values represent the distance to the detected object.",
+                "type": "Object"
+            },
+            "class": "Tracy"
+        }
+    ],
+    "warnings": []
+}
