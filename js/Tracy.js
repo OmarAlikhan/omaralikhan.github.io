@@ -69,7 +69,7 @@ function Tracy(x,y,z)
         this.chassisBody.velocity.vsub(previousVelocity,this.acceleration);
         previousVelocity.copy(this.chassisBody.velocity);
     }
-    setInterval(updateAccelerometer.bind(this),500);
+    setInterval(updateAccelerometerReadings.bind(this),500);
 
     /* Update proximity sensors readings every 500 ms */
     this.proximitySensorReading = {
